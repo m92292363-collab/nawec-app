@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A2E5C">
+<meta name="color-scheme" content="light">
+<title>NAWEC — My Power & Water</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<!-- Non-blocking display font -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" media="print" onload="this.media='all'">
+<style>
+:root{
+  --navy:#0A2E5C; --blue:#1463B8; --amber:#FFB300; --amber-ink:#7A5200;
+  --teal:#0E8F95; --bg:#F2F6FA; --card:#FFFFFF; --ink:#122641; --mut:#5B6E86;
+  --line:#DCE6F0; --ok:#1F9D55; --bad:#C0392B; --r:14px;
+  --font-d:'Space Grotesk',system-ui,sans-serif;
+  --font-b:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-family:var(--font-b);background:var(--bg);color:var(--ink);min-height:100vh;font-size:16px}
+button,input,select,textarea{font:inherit}
+.hidden{display:none!important}
+
+/* ---------- header ---------- */
+header{background:linear-gradient(135deg,var(--navy) 0%,#0D3F7E 100%);color:#fff;
+  padding:calc(env(safe-area-inset-top) + 14px) 18px 16px;position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .bolt{width:34px;height:34px;border-radius:9px;background:var(--amber);display:grid;place-items:center;color:var(--navy);font-weight:800;font-family:var(--font-d);font-size:19px}
+.brand h1{font-family:var(--font-d);font-size:19px;letter-spacing:.3px}
+.brand small{display:block;font-size:11px;opacity:.75;font-weight:400;letter-spacing:.4px}
+
+/* ---------- layout ---------- */
+main{max-width:520px;margin:0 auto;padding:16px 16px calc(86px + env(safe-area-inset-bottom))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:0 1px 2px rgba(10,46,92,.05)}
+h2{font-family:var(--font-d);font-size:17px;margin-bottom:10px;color:var(--navy)}
+.mut{color:var(--mut);font-size:13.5px}
+label{display:block;font-size:13px;font-weight:600;color:var(--mut);margin:12px 0 5px}
+input,select,textarea{width:100%;padding:13px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:16px}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid rgba(20,99,184,.35);outline-offset:1px;border-color:var(--blue)}
+.btn{display:block;width:100%;padding:14px;border:0;border-radius:11px;background:var(--navy);color:#fff;font-weight:700;font-size:16px;cursor:pointer;margin-top:14px}
+.btn.amber{background:var(--amber);color:var(--navy)}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.55}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.pill.active{background:#FDECEC;color:var(--bad)}
+.pill.planned{background:#FFF4D6;color:var(--amber-ink)}
+.pill.resolved,.pill.completed,.pill.paid{background:#E4F5EA;color:var(--ok)}
+.pill.open{background:#FDECEC;color:var(--bad)}
+.pill.investigating{background:#FFF4D6;color:var(--amber-ink)}
+.pill.unpaid{background:#FDECEC;color:var(--bad)}
+.msg{padding:11px 12px;border-radius:10px;font-size:14px;margin-top:12px}
+.msg.err{background:#FDECEC;color:var(--bad)}
+.msg.ok{background:#E4F5EA;color:var(--ok)}
+
+/* ---------- home ---------- */
+.meter-card{background:linear-gradient(135deg,var(--navy),#134A8E);color:#fff;border:0}
+.meter-card .mnum{font-family:var(--font-d);font-size:26px;letter-spacing:2px;margin:4px 0 2px}
+.meter-card .mut{color:#B9CBE3}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.quick button{padding:16px 10px;border-radius:var(--r);border:1px solid var(--line);background:#fff;font-weight:700;color:var(--navy);cursor:pointer;font-size:14.5px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.quick button span{font-size:22px}
+.alertstrip{background:#FFF4D6;border:1px solid #F2DFA0;border-radius:var(--r);padding:12px 14px;margin-bottom:14px;font-size:14px;color:var(--amber-ink)}
+
+/* ---------- token receipt (signature) ---------- */
+.receipt{background:#fff;border:1px solid var(--line);border-radius:4px;padding:20px 18px 26px;position:relative;
+  font-family:var(--font-d);box-shadow:0 6px 18px rgba(10,46,92,.12);margin-top:14px}
+.receipt::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:12px;
+  background:radial-gradient(circle at 8px -2px, transparent 7px, #fff 8px);background-size:16px 12px;background-repeat:repeat-x;
+  filter:drop-shadow(0 2px 1px rgba(10,46,92,.08))}
+.receipt .rhead{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);border-bottom:1.5px dashed var(--line);padding-bottom:10px;margin-bottom:12px;font-family:var(--font-b)}
+.receipt .tk{font-size:24px;letter-spacing:1.5px;text-align:center;color:var(--navy);font-weight:700;word-spacing:2px;line-height:1.5;margin:8px 0}
+.receipt .kwh{text-align:center;font-size:15px;color:var(--teal);font-weight:700}
+.receipt .hint{text-align:center;font-size:12px;color:var(--mut);font-family:var(--font-b);margin-top:10px}
+.receipt .demo{position:absolute;top:10px;right:10px;font-size:10px;background:#FFF4D6;color:var(--amber-ink);padding:2px 8px;border-radius:999px;font-family:var(--font-b);font-weight:700}
+.copybtn{margin-top:12px}
+
+/* ---------- lists ---------- */
+.item{padding:13px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.item:last-child{border-bottom:0}
+.item b{font-size:14.5px}
+.item .sub{font-size:12.5px;color:var(--mut);margin-top:2px}
+.amt{font-family:var(--font-d);font-weight:700;color:var(--navy);white-space:nowrap}
+
+/* ---------- amounts grid ---------- */
+.amts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.amts button{padding:12px 4px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-weight:700;color:var(--navy);cursor:pointer;font-family:var(--font-d)}
+.amts button.sel{border-color:var(--amber);background:#FFF8E5}
+
+/* ---------- bottom nav ---------- */
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:30;
+  padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;padding:9px 2px 7px;border:0;background:none;color:var(--mut);font-size:10.5px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button .ic{font-size:20px;line-height:1}
+nav button.on{color:var(--navy)}
+nav button.on .ic{transform:translateY(-1px)}
+
+/* auth */
+#authView main{padding-top:34px}
+.authlogo{text-align:center;margin-bottom:22px}
+.authlogo .bolt{width:58px;height:58px;font-size:30px;border-radius:16px;margin:0 auto 10px;background:var(--amber);color:var(--navy);display:grid;place-items:center;font-family:var(--font-d);font-weight:800}
+.authlogo h1{font-family:var(--font-d);color:var(--navy);font-size:24px}
+.tabs2{display:flex;background:#E7EEF6;border-radius:11px;padding:4px;margin-bottom:14px}
+.tabs2 button{flex:1;padding:10px;border:0;border-radius:8px;background:none;font-weight:700;color:var(--mut);cursor:pointer}
+.tabs2 button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(10,46,92,.12)}
+@media (prefers-reduced-motion:no-preference){
+  .card,.receipt{animation:up .25s ease both}
+  @keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= AUTH ================= -->
+<div id="authView">
+<main>
+  <div class="authlogo">
+    <div class="bolt">⚡</div>
+    <h1>NAWEC</h1>
+    <p class="mut">My Power &amp; Water — customer self-service</p>
+  </div>
+  <div class="card">
+    <div class="tabs2">
+      <button id="tabLogin" class="on" onclick="authTab('login')">Log in</button>
+      <button id="tabReg" onclick="authTab('reg')">Register</button>
+    </div>
+
+    <div id="loginForm">
+      <label>Meter number</label>
+      <input id="liMeter" inputmode="numeric" placeholder="e.g. 04123456789" autocomplete="username">
+      <label>4-digit PIN</label>
+      <input id="liPin" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+      <button class="btn" onclick="doLogin()">Log in</button>
+    </div>
+
+    <div id="regForm" class="hidden">
+      <label>Full name</label>
+      <input id="rgName" placeholder="e.g. Fatou Ceesay">
+      <label>Phone number</label>
+      <input id="rgPhone" inputmode="tel" placeholder="e.g. 3XXXXXX">
+      <label>Meter number</label>
+      <input id="rgMeter" inputmode="numeric" placeholder="On your meter or old receipt">
+      <label>Choose a 4-digit PIN</label>
+      <input id="rgPin" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+      <button class="btn amber" onclick="doRegister()">Create account</button>
+    </div>
+    <div id="authMsg"></div>
+  </div>
+  <p class="mut" style="text-align:center">Your PIN protects your account. Never share it.</p>
+</main>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="appView" class="hidden">
+<header>
+  <div class="brand">
+    <div class="bolt">⚡</div>
+    <h1 id="hdrTitle">NAWEC<small id="hdrSub">My Power &amp; Water</small></h1>
+  </div>
+</header>
+<main>
+
+  <!-- HOME -->
+  <section id="pg-home">
+    <div id="homeAlert"></div>
+    <div class="card meter-card">
+      <span class="mut">Meter number</span>
+      <div class="mnum" id="homeMeter">—</div>
+      <span class="mut" id="homeName">—</span>
+    </div>
+    <div class="quick">
+      <button onclick="go('buy')"><span>⚡</span>Buy cash power</button>
+      <button onclick="go('outages')"><span>🔌</span>Report outage</button>
+      <button onclick="go('bills')"><span>🧾</span>My bills</button>
+      <button onclick="go('meter')"><span>🔢</span>Send reading</button>
+    </div>
+    <div class="card" id="lastTokenCard" style="margin-top:14px"></div>
+  </section>
+
+  <!-- BUY -->
+  <section id="pg-buy" class="hidden">
+    <div class="card">
+      <h2>Buy cash power</h2>
+      <p class="mut">Token goes to meter <b id="buyMeter"></b></p>
+      <label>Amount (Dalasi)</label>
+      <div class="amts" id="amts"></div>
+      <input id="buyAmt" inputmode="numeric" placeholder="Or type an amount" style="margin-top:8px">
+      <label>Pay with</label>
+      <select id="buyProv">
+        <option value="demo">Demo payment (pilot)</option>
+        <option value="qmoney">QMoney</option>
+        <option value="africell">Africell Money</option>
+        <option value="wave">Wave</option>
+      </select>
+      <p class="mut" id="buyEst" style="margin-top:10px"></p>
+      <button class="btn amber" id="buyBtn" onclick="doBuy()">Pay &amp; get token</button>
+      <div id="buyMsg"></div>
+    </div>
+    <div id="buyReceipt"></div>
+    <div class="card">
+      <h2>Recent tokens</h2>
+      <div id="buyHist" class="mut">Loading…</div>
+    </div>
+  </section>
+
+  <!-- OUTAGES -->
+  <section id="pg-outages" class="hidden">
+    <div class="card">
+      <h2>Outage alerts</h2>
+      <div id="alertsList" class="mut">Loading…</div>
+    </div>
+    <div class="card">
+      <h2>Report an outage</h2>
+      <label>Service</label>
+      <select id="repService"><option value="electricity">Electricity</option><option value="water">Water</option></select>
+      <label>Area / neighbourhood</label>
+      <input id="repArea" placeholder="e.g. Sukuta Sanchaba">
+      <label>What's happening? (optional)</label>
+      <textarea id="repDesc" rows="2" placeholder="e.g. No light since 2pm, whole street affected"></textarea>
+      <button class="btn ghost" onclick="getLoc()" id="locBtn">📍 Attach my location (optional)</button>
+      <button class="btn" onclick="doReport()">Send report</button>
+      <div id="repMsg"></div>
+    </div>
+    <div class="card">
+      <h2>My reports</h2>
+      <div id="myReports" class="mut">Loading…</div>
+    </div>
+  </section>
+
+  <!-- BILLS -->
+  <section id="pg-bills" class="hidden">
+    <div class="card">
+      <h2>Bills &amp; payment history</h2>
+      <p class="mut">Postpaid bills appear here. Cash power purchases are under Buy.</p>
+      <div id="billsList" class="mut" style="margin-top:8px">Loading…</div>
+    </div>
+  </section>
+
+  <!-- METER -->
+  <section id="pg-meter" class="hidden">
+    <div class="card">
+      <h2>Submit meter reading</h2>
+      <p class="mut">Read the number on your meter display and enter it below.</p>
+      <label>Current reading (kWh)</label>
+      <input id="mrVal" inputmode="decimal" placeholder="e.g. 04521.7">
+      <label>Note (optional)</label>
+      <input id="mrNote" placeholder="e.g. reading taken at 9am">
+      <button class="btn" onclick="doReading()">Submit reading</button>
+      <div id="mrMsg"></div>
+    </div>
+    <div class="card">
+      <h2>My past readings</h2>
+      <div id="mrList" class="mut">Loading…</div>
+    </div>
+    <div class="card">
+      <h2>Account</h2>
+      <div id="acctInfo" class="mut"></div>
+      <button class="btn ghost" onclick="logout()">Log out</button>
+    </div>
+  </section>
+</main>
+
+<nav>
+  <button data-pg="home" class="on" onclick="go('home')"><span class="ic">🏠</span>Home</button>
+  <button data-pg="buy" onclick="go('buy')"><span class="ic">⚡</span>Buy</button>
+  <button data-pg="outages" onclick="go('outages')"><span class="ic">🔌</span>Outages</button>
+  <button data-pg="bills" onclick="go('bills')"><span class="ic">🧾</span>Bills</button>
+  <button data-pg="meter" onclick="go('meter')"><span class="ic">🔢</span>Meter</button>
+</nav>
+</div>
+
+<script>
+const API='/.netlify/functions/api';
+const TARIFF=12.0; // display estimate only — server is source of truth
+let S={session:localStorage.getItem('nw_session')||'',customer:JSON.parse(localStorage.getItem('nw_customer')||'null'),loc:null};
+
+async function api(action,data={}){
+  const r=await fetch(API,{method:'POST',
+    headers:{'Content-Type':'application/json','X-Auth':S.session},
+    body:JSON.stringify({action,...data})});
+  const j=await r.json();
+  if(!r.ok)throw new Error(j.error||'Something went wrong');
+  return j;
+}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const D=n=>'D'+Number(n).toLocaleString('en-GM',{minimumFractionDigits:2,maximumFractionDigits:2});
+const dt=s=>new Date(s).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+function msg(el,text,ok){$(el).innerHTML=text?`<div class="msg ${ok?'ok':'err'}">${esc(text)}</div>`:'';}
+
+/* ---------- auth ---------- */
+function authTab(t){
+  $('tabLogin').classList.toggle('on',t==='login');$('tabReg').classList.toggle('on',t==='reg');
+  $('loginForm').classList.toggle('hidden',t!=='login');$('regForm').classList.toggle('hidden',t!=='reg');
+  msg('authMsg','');
+}
+async function doLogin(){
+  try{
+    const j=await api('login',{meter:$('liMeter').value,pin:$('liPin').value});
+    startSession(j);
+  }catch(e){msg('authMsg',e.message);}
+}
+async function doRegister(){
+  try{
+    const j=await api('register',{name:$('rgName').value,phone:$('rgPhone').value,meter:$('rgMeter').value,pin:$('rgPin').value});
+    startSession(j);
+  }catch(e){msg('authMsg',e.message);}
+}
+function startSession(j){
+  S.session=j.session;S.customer=j.customer;
+  localStorage.setItem('nw_session',j.session);
+  localStorage.setItem('nw_customer',JSON.stringify(j.customer));
+  boot();
+}
+function logout(){localStorage.removeItem('nw_session');localStorage.removeItem('nw_customer');location.reload();}
+
+/* ---------- navigation ---------- */
+function go(pg){
+  document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+  $('pg-'+pg).classList.remove('hidden');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.pg===pg));
+  window.scrollTo(0,0);
+  if(pg==='buy')loadPurchases();
+  if(pg==='outages'){loadAlerts('alertsList');loadMyReports();}
+  if(pg==='bills')loadBills();
+  if(pg==='meter'){loadReadings();$('acctInfo').innerHTML=`<div class="item"><div><b>${esc(S.customer.name)}</b><div class="sub">${esc(S.customer.phone)} · Meter ${esc(S.customer.meter_number)}</div></div></div>`;}
+}
+
+/* ---------- home ---------- */
+async function loadHome(){
+  $('homeMeter').textContent=S.customer.meter_number;
+  $('homeName').textContent=S.customer.name;
+  try{
+    const j=await api('alerts');
+    const a=j.alerts[0];
+    $('homeAlert').innerHTML=a?`<div class="alertstrip">⚠️ <b>${esc(a.title)}</b> — ${esc(a.area)} <span class="pill ${esc(a.status)}">${esc(a.status)}</span></div>`:'';
+  }catch(e){}
+  try{
+    const j=await api('purchases');
+    const p=j.purchases[0];
+    $('lastTokenCard').innerHTML=p
+      ?`<h2>Last token</h2>${receiptHTML(p)}`
+      :`<h2>Welcome 👋</h2><p class="mut">Buy your first cash power token and it will appear here for easy access.</p>`;
+  }catch(e){}
+}
+
+/* ---------- token receipt ---------- */
+function receiptHTML(p){
+  return `<div class="receipt">
+    ${p.provider==='demo'?'<span class="demo">DEMO TOKEN</span>':''}
+    <div class="rhead"><span>NAWEC PREPAID</span><span>${dt(p.created_at)}</span></div>
+    <div class="rhead" style="border:0;margin:0;padding:0"><span>Meter ${esc(S.customer.meter_number)}</span><span>${D(p.amount_gmd)}</span></div>
+    <div class="tk">${esc(p.token)}</div>
+    <div class="kwh">${Number(p.units_kwh).toFixed(2)} kWh</div>
+    <div class="hint">Enter the 20 digits on your meter keypad, then press ⏎</div>
+    <button class="btn ghost copybtn" onclick="copyTok('${esc(p.token)}',this)">Copy token</button>
+  </div>`;
+}
+function copyTok(t,btn){navigator.clipboard?.writeText(t.replace(/-/g,''));btn.textContent='Copied ✓';setTimeout(()=>btn.textContent='Copy token',1500);}
+
+/* ---------- buy ---------- */
+const PRESETS=[50,100,200,300,500,1000];
+function initBuy(){
+  $('buyMeter').textContent=S.customer.meter_number;
+  $('amts').innerHTML=PRESETS.map(a=>`<button onclick="pickAmt(${a},this)">D${a}</button>`).join('');
+  $('buyAmt').addEventListener('input',updEst);
+  updEst();
+}
+function pickAmt(a,btn){
+  $('buyAmt').value=a;
+  document.querySelectorAll('.amts button').forEach(b=>b.classList.toggle('sel',b===btn));
+  updEst();
+}
+function updEst(){
+  const a=Number($('buyAmt').value);
+  $('buyEst').textContent=a>0?`≈ ${(a/TARIFF).toFixed(2)} kWh (estimate — final units from vending system)`:'';
+}
+async function doBuy(){
+  const btn=$('buyBtn');btn.disabled=true;btn.textContent='Processing…';msg('buyMsg','');
+  try{
+    const j=await api('purchase',{amount:Number($('buyAmt').value),provider:$('buyProv').value});
+    $('buyReceipt').innerHTML=receiptHTML(j.purchase);
+    msg('buyMsg','Payment successful. Your token is ready above.',true);
+    loadPurchases();loadHome();
+  }catch(e){msg('buyMsg',e.message);}
+  btn.disabled=false;btn.textContent='Pay & get token';
+}
+async function loadPurchases(){
+  try{
+    const j=await api('purchases');
+    $('buyHist').innerHTML=j.purchases.length?j.purchases.map(p=>`
+      <div class="item"><div><b>${esc(p.token)}</b><div class="sub">${dt(p.created_at)} · ${Number(p.units_kwh).toFixed(2)} kWh · ${esc(p.provider)}</div></div>
+      <span class="amt">${D(p.amount_gmd)}</span></div>`).join(''):'No purchases yet.';
+  }catch(e){$('buyHist').textContent=e.message;}
+}
+
+/* ---------- outages ---------- */
+async function loadAlerts(el){
+  try{
+    const j=await api('alerts');
+    $(el).innerHTML=j.alerts.length?j.alerts.map(a=>`
+      <div class="item"><div><b>${esc(a.title)}</b>
+        <div class="sub">${esc(a.area)} · ${a.service==='water'?'💧 Water':'⚡ Electricity'}${a.ends_at?' · until '+dt(a.ends_at):''}</div>
+        ${a.description?`<div class="sub">${esc(a.description)}</div>`:''}</div>
+      <span class="pill ${esc(a.status)}">${esc(a.status)}</span></div>`).join(''):'No active alerts. 🎉';
+  }catch(e){$(el).textContent=e.message;}
+}
+function getLoc(){
+  $('locBtn').textContent='Getting location…';
+  navigator.geolocation.getCurrentPosition(
+    p=>{S.loc={lat:p.coords.latitude,lng:p.coords.longitude};$('locBtn').textContent='📍 Location attached ✓';},
+    ()=>{$('locBtn').textContent='📍 Location unavailable — describe the area instead';});
+}
+async function doReport(){
+  try{
+    await api('report_outage',{service:$('repService').value,area:$('repArea').value,description:$('repDesc').value,lat:S.loc?.lat,lng:S.loc?.lng});
+    msg('repMsg','Report sent. NAWEC teams can now see it.',true);
+    $('repArea').value='';$('repDesc').value='';S.loc=null;$('locBtn').textContent='📍 Attach my location (optional)';
+    loadMyReports();
+  }catch(e){msg('repMsg',e.message);}
+}
+async function loadMyReports(){
+  try{
+    const j=await api('my_reports');
+    $('myReports').innerHTML=j.reports.length?j.reports.map(r=>`
+      <div class="item"><div><b>${r.service==='water'?'💧':'⚡'} ${esc(r.area)}</b><div class="sub">${dt(r.created_at)}${r.description?' · '+esc(r.description):''}</div></div>
+      <span class="pill ${esc(r.status)}">${esc(r.status)}</span></div>`).join(''):'No reports yet.';
+  }catch(e){$('myReports').textContent=e.message;}
+}
+
+/* ---------- bills ---------- */
+async function loadBills(){
+  try{
+    const j=await api('bills');
+    $('billsList').innerHTML=j.bills.length?j.bills.map(b=>`
+      <div class="item"><div><b>${esc(b.period)}</b><div class="sub">${b.due_date?'Due '+new Date(b.due_date).toLocaleDateString('en-GB'):''}${b.paid_at?' · paid '+dt(b.paid_at):''}</div></div>
+      <div style="text-align:right"><span class="amt">${D(b.amount_gmd)}</span><br><span class="pill ${esc(b.status)}">${esc(b.status)}</span></div></div>`).join('')
+      :'No bills on this account. Prepaid customers will see purchase history under Buy.';
+  }catch(e){$('billsList').textContent=e.message;}
+}
+
+/* ---------- readings ---------- */
+async function doReading(){
+  try{
+    await api('submit_reading',{reading:$('mrVal').value,note:$('mrNote').value});
+    msg('mrMsg','Reading submitted. Thank you!',true);$('mrVal').value='';$('mrNote').value='';loadReadings();
+  }catch(e){msg('mrMsg',e.message);}
+}
+async function loadReadings(){
+  try{
+    const j=await api('my_readings');
+    $('mrList').innerHTML=j.readings.length?j.readings.map(r=>`
+      <div class="item"><div><b>${Number(r.reading_kwh).toLocaleString()} kWh</b><div class="sub">${dt(r.created_at)}${r.note?' · '+esc(r.note):''}</div></div></div>`).join(''):'No readings submitted yet.';
+  }catch(e){$('mrList').textContent=e.message;}
+}
+
+/* ---------- boot ---------- */
+function boot(){
+  if(!S.session||!S.customer){$('authView').classList.remove('hidden');$('appView').classList.add('hidden');return;}
+  $('authView').classList.add('hidden');$('appView').classList.remove('hidden');
+  initBuy();loadHome();go('home');
+}
+boot();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>

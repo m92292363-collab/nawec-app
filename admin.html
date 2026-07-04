@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B1526">
+<meta name="color-scheme" content="dark">
+<title>NAWEC — Staff Portal</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" media="print" onload="this.media='all'">
+<style>
+:root{
+  --bg:#0B1526; --panel:#111E33; --panel2:#16263F; --line:#22355380;
+  --ink:#E8EFF8; --mut:#8DA2BE; --amber:#FFB300; --teal:#2FC6CC; --bad:#FF6B5E; --ok:#3ED598;
+  --font-d:'Space Grotesk',system-ui,sans-serif; --font-b:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-b);min-height:100vh;font-size:15px}
+.hidden{display:none!important}
+header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}
+header h1{font-family:var(--font-d);font-size:18px}
+header h1 span{color:var(--amber)}
+header button{background:none;border:1px solid var(--line);color:var(--mut);padding:7px 14px;border-radius:8px;cursor:pointer}
+main{max-width:1080px;margin:0 auto;padding:18px 16px 60px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tabs button{padding:9px 16px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--mut);font-weight:600;cursor:pointer}
+.tabs button.on{background:var(--amber);color:#0B1526;border-color:var(--amber)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:18px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.kpi .n{font-family:var(--font-d);font-size:38px;font-weight:700;line-height:1.1}
+.kpi .l{color:var(--mut);font-size:13px;margin-top:4px}
+.kpi.amber .n{color:var(--amber)} .kpi.teal .n{color:var(--teal)} .kpi.bad .n{color:var(--bad)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+.panel h2{font-family:var(--font-d);font-size:16px;margin-bottom:14px;color:var(--ink)}
+/* horizontal bars */
+.bar{display:grid;grid-template-columns:120px 1fr 74px;align-items:center;gap:10px;margin-bottom:10px}
+.bar .lb{font-size:13px;color:var(--mut);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar .tr{background:var(--panel2);border-radius:6px;height:22px;overflow:hidden}
+.bar .fl{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--amber),#FFD24D)}
+.bar.teal .fl{background:linear-gradient(90deg,var(--teal),#6FE3E8)}
+.bar .v{font-family:var(--font-d);font-weight:700;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{color:var(--mut);text-align:left;font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:700}
+.pill.open,.pill.active,.pill.unpaid{background:#3A1F22;color:var(--bad)}
+.pill.investigating,.pill.planned{background:#3A3212;color:var(--amber)}
+.pill.resolved,.pill.completed,.pill.paid{background:#12392B;color:var(--ok)}
+select,input,textarea{background:var(--panel2);border:1px solid var(--line);color:var(--ink);padding:9px 10px;border-radius:8px;font:inherit;width:100%}
+label{display:block;font-size:12.5px;color:var(--mut);margin:10px 0 4px;font-weight:600}
+.btn{background:var(--amber);color:#0B1526;border:0;padding:11px 18px;border-radius:9px;font-weight:700;cursor:pointer;margin-top:12px}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.mini{background:none;border:1px solid var(--line);color:var(--mut);padding:4px 10px;border-radius:7px;cursor:pointer;font-size:12px}
+.msg{margin-top:10px;font-size:13.5px;color:var(--ok)}.msg.err{color:var(--bad)}
+.scroll{overflow-x:auto}
+/* login */
+#login{max-width:380px;margin:12vh auto;padding:0 16px}
+#login .panel{padding:26px}
+#login h1{font-family:var(--font-d);margin-bottom:4px}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="panel">
+    <h1>NAWEC <span style="color:var(--amber)">Staff</span></h1>
+    <p style="color:var(--mut);font-size:13.5px">Operations portal — authorized staff only</p>
+    <label>Portal password</label>
+    <input id="pw" type="password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn" onclick="doLogin()">Enter</button>
+    <div id="loginMsg" class="msg err"></div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+<header>
+  <h1>NAWEC <span>Staff Portal</span></h1>
+  <button onclick="logout()">Log out</button>
+</header>
+<main>
+  <div class="tabs">
+    <button class="on" data-t="dash" onclick="tab('dash')">Dashboard</button>
+    <button data-t="alerts" onclick="tab('alerts')">Alerts</button>
+    <button data-t="reports" onclick="tab('reports')">Outage reports</button>
+    <button data-t="readings" onclick="tab('readings')">Meter readings</button>
+    <button data-t="sales" onclick="tab('sales')">Sales</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <section id="t-dash">
+    <div class="grid">
+      <div class="kpi amber"><div class="n" id="kSalesToday">—</div><div class="l">Cash power sales today (GMD)</div></div>
+      <div class="kpi teal"><div class="n" id="kSales7">—</div><div class="l">Sales — last 7 days (GMD)</div></div>
+      <div class="kpi"><div class="n" id="kCustomers">—</div><div class="l">Registered customers</div></div>
+      <div class="kpi bad"><div class="n" id="kOpen">—</div><div class="l">Open outage reports</div></div>
+    </div>
+    <div class="panel"><h2>Sales by day — last 7 days</h2><div id="chartSales"></div></div>
+    <div class="panel"><h2>Outage reports by area — last 30 days</h2><div id="chartAreas"></div></div>
+  </section>
+
+  <!-- ALERTS -->
+  <section id="t-alerts" class="hidden">
+    <div class="panel">
+      <h2>Publish an alert</h2>
+      <div class="row">
+        <div><label>Title</label><input id="alTitle" placeholder="e.g. Planned maintenance — Kotu"></div>
+        <div><label>Area(s)</label><input id="alArea" placeholder="e.g. Kotu, Manjai, Kololi"></div>
+      </div>
+      <label>Description</label><textarea id="alDesc" rows="2"></textarea>
+      <div class="row">
+        <div><label>Service</label><select id="alService"><option value="electricity">Electricity</option><option value="water">Water</option></select></div>
+        <div><label>Status</label><select id="alStatus"><option value="active">Active</option><option value="planned">Planned</option></select></div>
+      </div>
+      <button class="btn" onclick="createAlert()">Publish alert</button>
+      <div id="alMsg" class="msg"></div>
+    </div>
+    <div class="panel"><h2>All alerts</h2><div class="scroll"><table id="alertsTbl"></table></div></div>
+  </section>
+
+  <!-- REPORTS -->
+  <section id="t-reports" class="hidden">
+    <div class="panel"><h2>Customer outage reports</h2><div class="scroll"><table id="reportsTbl"></table></div></div>
+  </section>
+
+  <!-- READINGS -->
+  <section id="t-readings" class="hidden">
+    <div class="panel"><h2>Submitted meter readings</h2><div class="scroll"><table id="readingsTbl"></table></div></div>
+  </section>
+
+  <!-- SALES -->
+  <section id="t-sales" class="hidden">
+    <div class="panel"><h2>Token sales</h2><div class="scroll"><table id="salesTbl"></table></div></div>
+  </section>
+</main>
+</div>
+
+<script>
+const API='/.netlify/functions/api';
+let KEY=sessionStorage.getItem('nw_admin')||'';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const D=n=>Number(n).toLocaleString('en-GM',{maximumFractionDigits:0});
+const dt=s=>new Date(s).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+
+async function api(action,data={}){
+  const r=await fetch(API,{method:'POST',
+    headers:{'Content-Type':'application/json','X-Admin-Key':KEY},
+    body:JSON.stringify({action,...data})});
+  const j=await r.json();
+  if(!r.ok)throw new Error(j.error||'Error');
+  return j;
+}
+
+async function doLogin(){
+  KEY=$('pw').value;
+  try{await api('admin_login');sessionStorage.setItem('nw_admin',KEY);boot();}
+  catch(e){$('loginMsg').textContent=e.message;}
+}
+function logout(){sessionStorage.removeItem('nw_admin');location.reload();}
+
+function tab(t){
+  document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+  $('t-'+t).classList.remove('hidden');
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  ({dash:loadDash,alerts:loadAlerts,reports:loadReports,readings:loadReadings,sales:loadSales})[t]();
+}
+
+/* -------- horizontal bar chart (pure DOM) -------- */
+function bars(el,rows,labelKey,valKey,fmt,cls=''){
+  const max=Math.max(...rows.map(r=>Number(r[valKey])),1);
+  $(el).innerHTML=rows.length?rows.map(r=>`
+    <div class="bar ${cls}">
+      <span class="lb" title="${esc(r[labelKey])}">${esc(r[labelKey])}</span>
+      <div class="tr"><div class="fl" style="width:${(Number(r[valKey])/max*100).toFixed(1)}%"></div></div>
+      <span class="v">${fmt(r[valKey])}</span>
+    </div>`).join(''):'<span style="color:var(--mut)">No data yet.</span>';
+}
+
+async function loadDash(){
+  try{
+    const s=await api('admin_stats');
+    $('kSalesToday').textContent=D(s.sales_today.s);
+    $('kSales7').textContent=D(s.sales_7d.s);
+    $('kCustomers').textContent=D(s.customers);
+    $('kOpen').textContent=D(s.reports_open);
+    bars('chartSales',s.sales_by_day,'d','s',v=>'D'+D(v));
+    bars('chartAreas',s.reports_by_area,'area','n',v=>D(v),'teal');
+  }catch(e){alert(e.message);}
+}
+
+/* -------- alerts -------- */
+async function createAlert(){
+  try{
+    await api('admin_alert_create',{title:$('alTitle').value,area:$('alArea').value,description:$('alDesc').value,service:$('alService').value,status:$('alStatus').value});
+    $('alMsg').textContent='Alert published.';$('alTitle').value='';$('alArea').value='';$('alDesc').value='';
+    loadAlerts();
+  }catch(e){$('alMsg').textContent=e.message;}
+}
+async function loadAlerts(){
+  const j=await api('admin_alerts');
+  $('alertsTbl').innerHTML=`<tr><th>Alert</th><th>Area</th><th>Service</th><th>Status</th><th>Created</th><th></th></tr>`+
+    j.alerts.map(a=>`<tr>
+      <td><b>${esc(a.title)}</b>${a.description?`<br><span style="color:var(--mut)">${esc(a.description)}</span>`:''}</td>
+      <td>${esc(a.area)}</td><td>${a.service==='water'?'💧':'⚡'}</td>
+      <td><span class="pill ${esc(a.status)}">${esc(a.status)}</span></td>
+      <td style="white-space:nowrap">${dt(a.created_at)}</td>
+      <td>${a.status!=='resolved'?`<button class="mini" onclick="setAlert(${a.id},'resolved')">Resolve</button>`:''}</td>
+    </tr>`).join('');
+}
+async function setAlert(id,status){await api('admin_alert_update',{id,status});loadAlerts();}
+
+/* -------- reports -------- */
+async function loadReports(){
+  const j=await api('admin_reports');
+  $('reportsTbl').innerHTML=`<tr><th>Area</th><th>Service</th><th>Details</th><th>Customer</th><th>When</th><th>Status</th><th></th></tr>`+
+    j.reports.map(r=>`<tr>
+      <td><b>${esc(r.area)}</b>${r.lat?`<br><a class="mini" style="text-decoration:none" href="https://maps.google.com/?q=${r.lat},${r.lng}" target="_blank" rel="noopener">📍 map</a>`:''}</td>
+      <td>${r.service==='water'?'💧':'⚡'}</td>
+      <td>${esc(r.description||'—')}</td>
+      <td>${esc(r.customer_name)}<br><span style="color:var(--mut)">${esc(r.customer_phone)} · ${esc(r.meter_number)}</span></td>
+      <td style="white-space:nowrap">${dt(r.created_at)}</td>
+      <td><span class="pill ${esc(r.status)}">${esc(r.status)}</span></td>
+      <td style="white-space:nowrap">
+        ${r.status==='open'?`<button class="mini" onclick="setReport(${r.id},'investigating')">Investigate</button>`:''}
+        ${r.status!=='resolved'?`<button class="mini" onclick="setReport(${r.id},'resolved')">Resolve</button>`:''}
+      </td>
+    </tr>`).join('');
+}
+async function setReport(id,status){await api('admin_report_update',{id,status});loadReports();}
+
+/* -------- readings -------- */
+async function loadReadings(){
+  const j=await api('admin_readings');
+  $('readingsTbl').innerHTML=`<tr><th>Customer</th><th>Meter</th><th>Reading (kWh)</th><th>Note</th><th>When</th></tr>`+
+    j.readings.map(m=>`<tr>
+      <td>${esc(m.customer_name)}</td><td>${esc(m.meter_number)}</td>
+      <td><b>${Number(m.reading_kwh).toLocaleString()}</b></td>
+      <td>${esc(m.note||'—')}</td><td style="white-space:nowrap">${dt(m.created_at)}</td>
+    </tr>`).join('');
+}
+
+/* -------- sales -------- */
+async function loadSales(){
+  const j=await api('admin_sales');
+  $('salesTbl').innerHTML=`<tr><th>Token</th><th>Customer</th><th>Meter</th><th>Amount</th><th>kWh</th><th>Provider</th><th>Ref</th><th>When</th></tr>`+
+    j.sales.map(p=>`<tr>
+      <td style="font-family:var(--font-d)">${esc(p.token)}</td>
+      <td>${esc(p.customer_name)}</td><td>${esc(p.meter_number)}</td>
+      <td><b>D${D(p.amount_gmd)}</b></td><td>${Number(p.units_kwh).toFixed(1)}</td>
+      <td>${esc(p.provider)}</td><td style="color:var(--mut)">${esc(p.payment_ref)}</td>
+      <td style="white-space:nowrap">${dt(p.created_at)}</td>
+    </tr>`).join('');
+}
+
+function boot(){$('login').classList.add('hidden');$('app').classList.remove('hidden');loadDash();}
+if(KEY){api('admin_login').then(boot).catch(()=>sessionStorage.removeItem('nw_admin'));}
+</script>
+</body>
+</html>
