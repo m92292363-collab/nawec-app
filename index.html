@@ -3,112 +3,122 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0A2E5C">
+<meta name="theme-color" content="#f2f2f7">
 <meta name="color-scheme" content="light">
 <title>NAWEC — My Power & Water</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<!-- Non-blocking display font -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
 <style>
 :root{
-  --navy:#0A2E5C; --blue:#1463B8; --amber:#FFB300; --amber-ink:#7A5200;
-  --teal:#0E8F95; --bg:#F2F6FA; --card:#FFFFFF; --ink:#122641; --mut:#5B6E86;
-  --line:#DCE6F0; --ok:#1F9D55; --bad:#C0392B; --r:14px;
-  --font-d:'Space Grotesk',system-ui,sans-serif;
-  --font-b:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --bg:#f2f2f7; --card:#ffffff; --label:#8e8e93; --separator:#e5e5ea;
+  --navy:#0a1628; --txt:#1c1c1e; --blue:#0a84ff; --green:#34c759;
+  --red:#ff3b30; --orange:#ff9500; --teal:#5ac8fa;
+  --blue-bg:rgba(10,132,255,0.08); --red-bg:rgba(255,59,48,0.08);
+  --orange-bg:rgba(255,149,0,0.08); --green-bg:rgba(52,199,89,0.1);
+  --r:20px;
+  --font:'Figtree',-apple-system,'Segoe UI',Roboto,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body{font-family:var(--font-b);background:var(--bg);color:var(--ink);min-height:100vh;font-size:16px}
+body{font-family:var(--font);background:var(--bg);color:var(--txt);min-height:100vh;font-size:16px}
 button,input,select,textarea{font:inherit}
 .hidden{display:none!important}
 
 /* ---------- header ---------- */
-header{background:linear-gradient(135deg,var(--navy) 0%,#0D3F7E 100%);color:#fff;
-  padding:calc(env(safe-area-inset-top) + 14px) 18px 16px;position:sticky;top:0;z-index:20}
-.brand{display:flex;align-items:center;gap:10px}
-.brand .bolt{width:34px;height:34px;border-radius:9px;background:var(--amber);display:grid;place-items:center;color:var(--navy);font-weight:800;font-family:var(--font-d);font-size:19px}
-.brand h1{font-family:var(--font-d);font-size:19px;letter-spacing:.3px}
-.brand small{display:block;font-size:11px;opacity:.75;font-weight:400;letter-spacing:.4px}
+header{background:rgba(242,242,247,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  padding:calc(env(safe-area-inset-top) + 14px) 20px 10px;position:sticky;top:0;z-index:20;
+  border-bottom:1px solid var(--separator)}
+.brand{display:flex;align-items:center;justify-content:space-between}
+.brand img{height:44px;width:auto;object-fit:contain}
+.hdr-title{font-size:26px;font-weight:800;letter-spacing:-0.6px;color:var(--navy);margin-top:6px}
 
 /* ---------- layout ---------- */
-main{max-width:520px;margin:0 auto;padding:16px 16px calc(86px + env(safe-area-inset-bottom))}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px;box-shadow:0 1px 2px rgba(10,46,92,.05)}
-h2{font-family:var(--font-d);font-size:17px;margin-bottom:10px;color:var(--navy)}
-.mut{color:var(--mut);font-size:13.5px}
-label{display:block;font-size:13px;font-weight:600;color:var(--mut);margin:12px 0 5px}
-input,select,textarea{width:100%;padding:13px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;font-size:16px}
-input:focus,select:focus,textarea:focus,button:focus-visible{outline:3px solid rgba(20,99,184,.35);outline-offset:1px;border-color:var(--blue)}
-.btn{display:block;width:100%;padding:14px;border:0;border-radius:11px;background:var(--navy);color:#fff;font-weight:700;font-size:16px;cursor:pointer;margin-top:14px}
-.btn.amber{background:var(--amber);color:var(--navy)}
-.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
-.btn:disabled{opacity:.55}
+main{max-width:430px;margin:0 auto;padding:16px 16px calc(88px + env(safe-area-inset-bottom))}
+.card{background:var(--card);border-radius:var(--r);padding:18px;margin-bottom:16px}
+h2{font-size:17px;font-weight:800;letter-spacing:-0.3px;margin-bottom:10px;color:var(--navy)}
+.mut{color:var(--label);font-size:13.5px}
+.section-label{font-size:13px;font-weight:600;color:var(--label);letter-spacing:.2px;text-transform:uppercase;margin:0 4px 8px}
+label{display:block;font-size:11px;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 5px}
+input,select,textarea{width:100%;padding:13px 14px;border:1.5px solid var(--separator);border-radius:14px;background:#fff;font-size:16px;color:var(--txt);transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,132,255,.1)}
+input::placeholder,textarea::placeholder{color:#b8c2cc}
+.btn{display:block;width:100%;padding:15px;border:0;border-radius:14px;background:var(--blue);color:#fff;font-weight:700;font-size:16px;cursor:pointer;margin-top:14px;transition:opacity .15s,transform .1s}
+.btn:active{transform:scale(.98)}
+.btn.green{background:var(--green)}
+.btn.ghost{background:var(--bg);color:var(--blue);font-weight:600}
+.btn:disabled{opacity:.45}
 .row{display:flex;gap:10px}.row>*{flex:1}
-.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700}
-.pill.active{background:#FDECEC;color:var(--bad)}
-.pill.planned{background:#FFF4D6;color:var(--amber-ink)}
-.pill.resolved,.pill.completed,.pill.paid{background:#E4F5EA;color:var(--ok)}
-.pill.open{background:#FDECEC;color:var(--bad)}
-.pill.investigating{background:#FFF4D6;color:var(--amber-ink)}
-.pill.unpaid{background:#FDECEC;color:var(--bad)}
-.msg{padding:11px 12px;border-radius:10px;font-size:14px;margin-top:12px}
-.msg.err{background:#FDECEC;color:var(--bad)}
-.msg.ok{background:#E4F5EA;color:var(--ok)}
+.pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.pill.active,.pill.open,.pill.unpaid{background:var(--red);color:#fff}
+.pill.planned,.pill.investigating{background:var(--orange);color:#fff}
+.pill.resolved,.pill.completed,.pill.paid{background:var(--green);color:#fff}
+.msg{padding:12px 14px;border-radius:14px;font-size:14px;margin-top:12px;font-weight:500}
+.msg.err{background:var(--red-bg);color:var(--red)}
+.msg.ok{background:var(--green-bg);color:#1d8f43}
 
 /* ---------- home ---------- */
-.meter-card{background:linear-gradient(135deg,var(--navy),#134A8E);color:#fff;border:0}
-.meter-card .mnum{font-family:var(--font-d);font-size:26px;letter-spacing:2px;margin:4px 0 2px}
-.meter-card .mut{color:#B9CBE3}
-.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
-.quick button{padding:16px 10px;border-radius:var(--r);border:1px solid var(--line);background:#fff;font-weight:700;color:var(--navy);cursor:pointer;font-size:14.5px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
-.quick button span{font-size:22px}
-.alertstrip{background:#FFF4D6;border:1px solid #F2DFA0;border-radius:var(--r);padding:12px 14px;margin-bottom:14px;font-size:14px;color:var(--amber-ink)}
+.meter-card{background:var(--navy);color:#fff;border-radius:var(--r);padding:20px;margin-bottom:16px}
+.meter-card .lbl{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;opacity:.6}
+.meter-card .mnum{font-size:27px;font-weight:800;letter-spacing:2px;margin:6px 0 4px}
+.meter-card .nm{font-size:13px;opacity:.7}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.quick button{padding:16px;border-radius:var(--r);border:0;background:var(--card);font-weight:700;color:var(--navy);cursor:pointer;font-size:14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;font-family:var(--font);transition:opacity .15s}
+.quick button:active{opacity:.7}
+.qicon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.qicon.blue{background:var(--blue-bg)} .qicon.red{background:var(--red-bg)}
+.qicon.orange{background:var(--orange-bg)} .qicon.green{background:var(--green-bg)}
+.alertstrip{background:var(--red);border-radius:var(--r);padding:16px 18px;margin-bottom:16px;font-size:14px;color:#fff;animation:slideDown .4s cubic-bezier(.34,1.56,.64,1)}
+.alertstrip.planned{background:var(--orange)}
+.alertstrip b{font-weight:800}
+.alertstrip .tag{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;opacity:.8;display:block;margin-bottom:4px}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
 
 /* ---------- token receipt (signature) ---------- */
-.receipt{background:#fff;border:1px solid var(--line);border-radius:4px;padding:20px 18px 26px;position:relative;
-  font-family:var(--font-d);box-shadow:0 6px 18px rgba(10,46,92,.12);margin-top:14px}
+.receipt{background:#fff;border-radius:16px;padding:20px 18px 26px;position:relative;margin-top:14px;
+  box-shadow:0 6px 24px rgba(10,22,40,.10)}
 .receipt::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:12px;
-  background:radial-gradient(circle at 8px -2px, transparent 7px, #fff 8px);background-size:16px 12px;background-repeat:repeat-x;
-  filter:drop-shadow(0 2px 1px rgba(10,46,92,.08))}
-.receipt .rhead{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);border-bottom:1.5px dashed var(--line);padding-bottom:10px;margin-bottom:12px;font-family:var(--font-b)}
-.receipt .tk{font-size:24px;letter-spacing:1.5px;text-align:center;color:var(--navy);font-weight:700;word-spacing:2px;line-height:1.5;margin:8px 0}
-.receipt .kwh{text-align:center;font-size:15px;color:var(--teal);font-weight:700}
-.receipt .hint{text-align:center;font-size:12px;color:var(--mut);font-family:var(--font-b);margin-top:10px}
-.receipt .demo{position:absolute;top:10px;right:10px;font-size:10px;background:#FFF4D6;color:var(--amber-ink);padding:2px 8px;border-radius:999px;font-family:var(--font-b);font-weight:700}
-.copybtn{margin-top:12px}
+  background:radial-gradient(circle at 8px -2px, transparent 7px, #fff 8px);background-size:16px 12px;background-repeat:repeat-x}
+.receipt .rhead{display:flex;justify-content:space-between;font-size:12px;color:var(--label);border-bottom:1.5px dashed var(--separator);padding-bottom:10px;margin-bottom:6px;font-weight:600}
+.receipt .tk{font-size:23px;letter-spacing:1.5px;text-align:center;color:var(--navy);font-weight:800;word-spacing:2px;line-height:1.5;margin:12px 0 4px}
+.receipt .kwh{text-align:center;font-size:15px;color:var(--green);font-weight:700}
+.receipt .hint{text-align:center;font-size:12px;color:var(--label);margin-top:10px}
+.receipt .demo{position:absolute;top:12px;right:12px;font-size:10px;background:var(--orange-bg);color:var(--orange);padding:3px 9px;border-radius:20px;font-weight:800}
+.copybtn{margin-top:14px}
 
 /* ---------- lists ---------- */
-.item{padding:13px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.item:last-child{border-bottom:0}
-.item b{font-size:14.5px}
-.item .sub{font-size:12.5px;color:var(--mut);margin-top:2px}
-.amt{font-family:var(--font-d);font-weight:700;color:var(--navy);white-space:nowrap}
+.group{background:var(--card);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.item{padding:14px 16px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start;position:relative}
+.item:not(:last-child)::after{content:'';position:absolute;bottom:0;left:16px;right:0;height:1px;background:var(--separator)}
+.item b{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.item .sub{font-size:12.5px;color:var(--label);margin-top:2px}
+.amt{font-weight:800;color:var(--navy);white-space:nowrap;font-size:15px}
 
 /* ---------- amounts grid ---------- */
 .amts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
-.amts button{padding:12px 4px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-weight:700;color:var(--navy);cursor:pointer;font-family:var(--font-d)}
-.amts button.sel{border-color:var(--amber);background:#FFF8E5}
+.amts button{padding:13px 4px;border-radius:14px;border:1.5px solid var(--separator);background:#fff;font-weight:700;color:var(--navy);cursor:pointer;font-family:var(--font);transition:all .15s}
+.amts button.sel{border-color:var(--blue);background:var(--blue-bg);color:var(--blue)}
 
 /* ---------- bottom nav ---------- */
-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;z-index:30;
-  padding-bottom:env(safe-area-inset-bottom)}
-nav button{flex:1;padding:9px 2px 7px;border:0;background:none;color:var(--mut);font-size:10.5px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}
-nav button .ic{font-size:20px;line-height:1}
-nav button.on{color:var(--navy)}
-nav button.on .ic{transform:translateY(-1px)}
+nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--separator);display:flex;z-index:30;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;padding:9px 2px 7px;border:0;background:none;color:var(--label);font-size:10.5px;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--font)}
+nav button .ic{font-size:21px;line-height:1;filter:grayscale(1);opacity:.55;transition:all .15s}
+nav button.on{color:var(--blue)}
+nav button.on .ic{filter:none;opacity:1;transform:translateY(-1px)}
 
-/* auth */
-#authView main{padding-top:34px}
-.authlogo{text-align:center;margin-bottom:22px}
-.authlogo .bolt{width:58px;height:58px;font-size:30px;border-radius:16px;margin:0 auto 10px;background:var(--amber);color:var(--navy);display:grid;place-items:center;font-family:var(--font-d);font-weight:800}
-.authlogo h1{font-family:var(--font-d);color:var(--navy);font-size:24px}
-.tabs2{display:flex;background:#E7EEF6;border-radius:11px;padding:4px;margin-bottom:14px}
-.tabs2 button{flex:1;padding:10px;border:0;border-radius:8px;background:none;font-weight:700;color:var(--mut);cursor:pointer}
-.tabs2 button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(10,46,92,.12)}
+/* ---------- auth ---------- */
+#authView main{padding-top:44px}
+.authlogo{text-align:center;margin-bottom:26px}
+.authlogo img{height:64px;width:auto;object-fit:contain;margin-bottom:12px}
+.authlogo h1{font-size:24px;font-weight:800;color:var(--navy);letter-spacing:-.5px}
+.authlogo p{font-size:14px;color:var(--label);margin-top:4px;line-height:1.5}
+.tabs2{display:flex;background:#e4e4e9;border-radius:14px;padding:4px;margin-bottom:16px}
+.tabs2 button{flex:1;padding:11px;border:0;border-radius:11px;background:none;font-weight:700;color:var(--label);cursor:pointer;font-family:var(--font);transition:all .2s}
+.tabs2 button.on{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.1)}
 @media (prefers-reduced-motion:no-preference){
-  .card,.receipt{animation:up .25s ease both}
+  .card,.receipt,.group{animation:up .25s ease both}
   @keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 }
 </style>
@@ -119,9 +129,9 @@ nav button.on .ic{transform:translateY(-1px)}
 <div id="authView">
 <main>
   <div class="authlogo">
-    <div class="bolt">⚡</div>
-    <h1>NAWEC</h1>
-    <p class="mut">My Power &amp; Water — customer self-service</p>
+    <img src="logo.png" alt="NAWEC" onerror="this.style.display='none'">
+    <h1>My Power &amp; Water</h1>
+    <p>Buy cash power, report outages and manage<br>your NAWEC account — all in one place.</p>
   </div>
   <div class="card">
     <div class="tabs2">
@@ -146,7 +156,7 @@ nav button.on .ic{transform:translateY(-1px)}
       <input id="rgMeter" inputmode="numeric" placeholder="On your meter or old receipt">
       <label>Choose a 4-digit PIN</label>
       <input id="rgPin" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
-      <button class="btn amber" onclick="doRegister()">Create account</button>
+      <button class="btn green" onclick="doRegister()">Create account</button>
     </div>
     <div id="authMsg"></div>
   </div>
@@ -158,27 +168,27 @@ nav button.on .ic{transform:translateY(-1px)}
 <div id="appView" class="hidden">
 <header>
   <div class="brand">
-    <div class="bolt">⚡</div>
-    <h1 id="hdrTitle">NAWEC<small id="hdrSub">My Power &amp; Water</small></h1>
+    <img src="logo.png" alt="NAWEC" onerror="this.style.display='none'">
   </div>
+  <div class="hdr-title" id="hdrTitle">My Power &amp; Water</div>
 </header>
 <main>
 
   <!-- HOME -->
   <section id="pg-home">
     <div id="homeAlert"></div>
-    <div class="card meter-card">
-      <span class="mut">Meter number</span>
+    <div class="meter-card">
+      <span class="lbl">Meter number</span>
       <div class="mnum" id="homeMeter">—</div>
-      <span class="mut" id="homeName">—</span>
+      <span class="nm" id="homeName">—</span>
     </div>
     <div class="quick">
-      <button onclick="go('buy')"><span>⚡</span>Buy cash power</button>
-      <button onclick="go('outages')"><span>🔌</span>Report outage</button>
-      <button onclick="go('bills')"><span>🧾</span>My bills</button>
-      <button onclick="go('meter')"><span>🔢</span>Send reading</button>
+      <button onclick="go('buy')"><span class="qicon blue">⚡</span>Buy cash power</button>
+      <button onclick="go('outages')"><span class="qicon red">🔌</span>Report outage</button>
+      <button onclick="go('bills')"><span class="qicon orange">🧾</span>My bills</button>
+      <button onclick="go('meter')"><span class="qicon green">🔢</span>Send reading</button>
     </div>
-    <div class="card" id="lastTokenCard" style="margin-top:14px"></div>
+    <div class="card" id="lastTokenCard"></div>
   </section>
 
   <!-- BUY -->
@@ -197,22 +207,18 @@ nav button.on .ic{transform:translateY(-1px)}
         <option value="wave">Wave</option>
       </select>
       <p class="mut" id="buyEst" style="margin-top:10px"></p>
-      <button class="btn amber" id="buyBtn" onclick="doBuy()">Pay &amp; get token</button>
+      <button class="btn" id="buyBtn" onclick="doBuy()">Pay &amp; get token</button>
       <div id="buyMsg"></div>
     </div>
     <div id="buyReceipt"></div>
-    <div class="card">
-      <h2>Recent tokens</h2>
-      <div id="buyHist" class="mut">Loading…</div>
-    </div>
+    <div class="section-label" style="margin-top:20px">Recent tokens</div>
+    <div class="group"><div id="buyHist" class="item mut">Loading…</div></div>
   </section>
 
   <!-- OUTAGES -->
   <section id="pg-outages" class="hidden">
-    <div class="card">
-      <h2>Outage alerts</h2>
-      <div id="alertsList" class="mut">Loading…</div>
-    </div>
+    <div class="section-label">Active alerts</div>
+    <div class="group"><div id="alertsList" class="item mut">Loading…</div></div>
     <div class="card">
       <h2>Report an outage</h2>
       <label>Service</label>
@@ -225,10 +231,8 @@ nav button.on .ic{transform:translateY(-1px)}
       <button class="btn" onclick="doReport()">Send report</button>
       <div id="repMsg"></div>
     </div>
-    <div class="card">
-      <h2>My reports</h2>
-      <div id="myReports" class="mut">Loading…</div>
-    </div>
+    <div class="section-label">My reports</div>
+    <div class="group"><div id="myReports" class="item mut">Loading…</div></div>
   </section>
 
   <!-- BILLS -->
@@ -236,8 +240,8 @@ nav button.on .ic{transform:translateY(-1px)}
     <div class="card">
       <h2>Bills &amp; payment history</h2>
       <p class="mut">Postpaid bills appear here. Cash power purchases are under Buy.</p>
-      <div id="billsList" class="mut" style="margin-top:8px">Loading…</div>
     </div>
+    <div class="group"><div id="billsList" class="item mut">Loading…</div></div>
   </section>
 
   <!-- METER -->
@@ -252,10 +256,8 @@ nav button.on .ic{transform:translateY(-1px)}
       <button class="btn" onclick="doReading()">Submit reading</button>
       <div id="mrMsg"></div>
     </div>
-    <div class="card">
-      <h2>My past readings</h2>
-      <div id="mrList" class="mut">Loading…</div>
-    </div>
+    <div class="section-label">My past readings</div>
+    <div class="group"><div id="mrList" class="item mut">Loading…</div></div>
     <div class="card">
       <h2>Account</h2>
       <div id="acctInfo" class="mut"></div>
@@ -291,6 +293,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const D=n=>'D'+Number(n).toLocaleString('en-GM',{minimumFractionDigits:2,maximumFractionDigits:2});
 const dt=s=>new Date(s).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
 function msg(el,text,ok){$(el).innerHTML=text?`<div class="msg ${ok?'ok':'err'}">${esc(text)}</div>`:'';}
+function fillGroup(el,html){const g=$(el);g.innerHTML=html;}
 
 /* ---------- auth ---------- */
 function authTab(t){
@@ -319,15 +322,17 @@ function startSession(j){
 function logout(){localStorage.removeItem('nw_session');localStorage.removeItem('nw_customer');location.reload();}
 
 /* ---------- navigation ---------- */
+const TITLES={home:'My Power & Water',buy:'Buy Cash Power',outages:'Outage Alerts',bills:'My Bills',meter:'Meter & Account'};
 function go(pg){
   document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
   $('pg-'+pg).classList.remove('hidden');
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.pg===pg));
+  $('hdrTitle').textContent=TITLES[pg];
   window.scrollTo(0,0);
   if(pg==='buy')loadPurchases();
   if(pg==='outages'){loadAlerts('alertsList');loadMyReports();}
   if(pg==='bills')loadBills();
-  if(pg==='meter'){loadReadings();$('acctInfo').innerHTML=`<div class="item"><div><b>${esc(S.customer.name)}</b><div class="sub">${esc(S.customer.phone)} · Meter ${esc(S.customer.meter_number)}</div></div></div>`;}
+  if(pg==='meter'){loadReadings();$('acctInfo').innerHTML=`<b style="color:var(--navy)">${esc(S.customer.name)}</b><div class="sub" style="color:var(--label);font-size:13px;margin-top:3px">${esc(S.customer.phone)} · Meter ${esc(S.customer.meter_number)}</div>`;}
 }
 
 /* ---------- home ---------- */
@@ -337,7 +342,9 @@ async function loadHome(){
   try{
     const j=await api('alerts');
     const a=j.alerts[0];
-    $('homeAlert').innerHTML=a?`<div class="alertstrip">⚠️ <b>${esc(a.title)}</b> — ${esc(a.area)} <span class="pill ${esc(a.status)}">${esc(a.status)}</span></div>`:'';
+    $('homeAlert').innerHTML=a?`<div class="alertstrip ${a.status==='planned'?'planned':''}" onclick="go('outages')">
+      <span class="tag">${a.status==='planned'?'Planned':'Active'} · ${a.service==='water'?'Water':'Electricity'}</span>
+      <b>${esc(a.title)}</b><div style="font-size:13px;opacity:.85;margin-top:3px">${esc(a.area)}</div></div>`:'';
   }catch(e){}
   try{
     const j=await api('purchases');
@@ -353,7 +360,7 @@ function receiptHTML(p){
   return `<div class="receipt">
     ${p.provider==='demo'?'<span class="demo">DEMO TOKEN</span>':''}
     <div class="rhead"><span>NAWEC PREPAID</span><span>${dt(p.created_at)}</span></div>
-    <div class="rhead" style="border:0;margin:0;padding:0"><span>Meter ${esc(S.customer.meter_number)}</span><span>${D(p.amount_gmd)}</span></div>
+    <div class="rhead" style="border:0;margin:0;padding:6px 0 0"><span>Meter ${esc(S.customer.meter_number)}</span><span>${D(p.amount_gmd)}</span></div>
     <div class="tk">${esc(p.token)}</div>
     <div class="kwh">${Number(p.units_kwh).toFixed(2)} kWh</div>
     <div class="hint">Enter the 20 digits on your meter keypad, then press ⏎</div>
@@ -392,22 +399,29 @@ async function doBuy(){
 async function loadPurchases(){
   try{
     const j=await api('purchases');
-    $('buyHist').innerHTML=j.purchases.length?j.purchases.map(p=>`
+    fillGroup('buyHist','');
+    $('buyHist').outerHTML=j.purchases.length?j.purchases.map(p=>`
       <div class="item"><div><b>${esc(p.token)}</b><div class="sub">${dt(p.created_at)} · ${Number(p.units_kwh).toFixed(2)} kWh · ${esc(p.provider)}</div></div>
-      <span class="amt">${D(p.amount_gmd)}</span></div>`).join(''):'No purchases yet.';
-  }catch(e){$('buyHist').textContent=e.message;}
+      <span class="amt">${D(p.amount_gmd)}</span></div>`).join('')
+      :'<div class="item mut" id="buyHist">No purchases yet.</div>';
+    if(j.purchases.length){const g=document.querySelector('#pg-buy .group');/* keep id anchor for reloads */
+      if(!document.getElementById('buyHist')){const d=document.createElement('div');d.id='buyHist';d.style.display='none';g.appendChild(d);}}
+  }catch(e){const el=$('buyHist');if(el)el.textContent=e.message;}
 }
 
 /* ---------- outages ---------- */
-async function loadAlerts(el){
+async function loadAlerts(elId){
   try{
     const j=await api('alerts');
-    $(el).innerHTML=j.alerts.length?j.alerts.map(a=>`
+    const html=j.alerts.length?j.alerts.map(a=>`
       <div class="item"><div><b>${esc(a.title)}</b>
         <div class="sub">${esc(a.area)} · ${a.service==='water'?'💧 Water':'⚡ Electricity'}${a.ends_at?' · until '+dt(a.ends_at):''}</div>
         ${a.description?`<div class="sub">${esc(a.description)}</div>`:''}</div>
-      <span class="pill ${esc(a.status)}">${esc(a.status)}</span></div>`).join(''):'No active alerts. 🎉';
-  }catch(e){$(el).textContent=e.message;}
+      <span class="pill ${esc(a.status)}">${a.status==='planned'?'PLANNED':a.status==='active'?'NOW':esc(a.status).toUpperCase()}</span></div>`).join('')
+      :'<div class="item mut">No active alerts. 🎉</div>';
+    document.getElementById(elId).closest('.group').innerHTML=html.includes('class="item')?html:`<div class="item mut" id="${elId}">${html}</div>`;
+    if(!document.getElementById(elId)){const d=document.createElement('div');d.id=elId;d.style.display='none';document.querySelector('#pg-outages .group').appendChild(d);}
+  }catch(e){const el=document.getElementById(elId);if(el)el.textContent=e.message;}
 }
 function getLoc(){
   $('locBtn').textContent='Getting location…';
@@ -426,21 +440,24 @@ async function doReport(){
 async function loadMyReports(){
   try{
     const j=await api('my_reports');
-    $('myReports').innerHTML=j.reports.length?j.reports.map(r=>`
+    const g=document.querySelectorAll('#pg-outages .group')[1];
+    g.innerHTML=j.reports.length?j.reports.map(r=>`
       <div class="item"><div><b>${r.service==='water'?'💧':'⚡'} ${esc(r.area)}</b><div class="sub">${dt(r.created_at)}${r.description?' · '+esc(r.description):''}</div></div>
-      <span class="pill ${esc(r.status)}">${esc(r.status)}</span></div>`).join(''):'No reports yet.';
-  }catch(e){$('myReports').textContent=e.message;}
+      <span class="pill ${esc(r.status)}">${esc(r.status).toUpperCase()}</span></div>`).join('')
+      :'<div class="item mut" id="myReports">No reports yet.</div>';
+  }catch(e){}
 }
 
 /* ---------- bills ---------- */
 async function loadBills(){
   try{
     const j=await api('bills');
-    $('billsList').innerHTML=j.bills.length?j.bills.map(b=>`
+    const g=document.querySelector('#pg-bills .group');
+    g.innerHTML=j.bills.length?j.bills.map(b=>`
       <div class="item"><div><b>${esc(b.period)}</b><div class="sub">${b.due_date?'Due '+new Date(b.due_date).toLocaleDateString('en-GB'):''}${b.paid_at?' · paid '+dt(b.paid_at):''}</div></div>
-      <div style="text-align:right"><span class="amt">${D(b.amount_gmd)}</span><br><span class="pill ${esc(b.status)}">${esc(b.status)}</span></div></div>`).join('')
-      :'No bills on this account. Prepaid customers will see purchase history under Buy.';
-  }catch(e){$('billsList').textContent=e.message;}
+      <div style="text-align:right"><span class="amt">${D(b.amount_gmd)}</span><br><span class="pill ${esc(b.status)}">${esc(b.status).toUpperCase()}</span></div></div>`).join('')
+      :'<div class="item mut" id="billsList">No bills on this account. Prepaid customers will see purchase history under Buy.</div>';
+  }catch(e){}
 }
 
 /* ---------- readings ---------- */
@@ -453,9 +470,11 @@ async function doReading(){
 async function loadReadings(){
   try{
     const j=await api('my_readings');
-    $('mrList').innerHTML=j.readings.length?j.readings.map(r=>`
-      <div class="item"><div><b>${Number(r.reading_kwh).toLocaleString()} kWh</b><div class="sub">${dt(r.created_at)}${r.note?' · '+esc(r.note):''}</div></div></div>`).join(''):'No readings submitted yet.';
-  }catch(e){$('mrList').textContent=e.message;}
+    const g=document.querySelectorAll('#pg-meter .group')[0];
+    g.innerHTML=j.readings.length?j.readings.map(r=>`
+      <div class="item"><div><b>${Number(r.reading_kwh).toLocaleString()} kWh</b><div class="sub">${dt(r.created_at)}${r.note?' · '+esc(r.note):''}</div></div></div>`).join('')
+      :'<div class="item mut" id="mrList">No readings submitted yet.</div>';
+  }catch(e){}
 }
 
 /* ---------- boot ---------- */
